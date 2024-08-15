@@ -2,7 +2,6 @@ using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium.Chrome;
-using System.Threading;
 
 namespace Senseflow_Selenium
 {
@@ -37,11 +36,11 @@ namespace Senseflow_Selenium
             IWebElement searchBox = chromeDriver.FindElement(By.Id("identifierId"));
             webDriverWait.Until(d => searchBox.Displayed);
             searchBox.SendKeys(Configuration["username"]);
-            searchBox.SendKeys(Keys.Enter);        
+            searchBox.SendKeys(Keys.Enter);
 
             webDriverWait.Until(d => d.Url.Contains("https://accounts.google.com/v3/signin/challenge/pwd"));
+            webDriverWait.Until(d => chromeDriver.FindElement(By.Name("Passwd")).Displayed);
             IWebElement passwordBox = chromeDriver.FindElement(By.Name("Passwd"));
-            webDriverWait.Until(d => passwordBox.Displayed);
             passwordBox.SendKeys(Configuration["password"]);
             passwordBox.SendKeys(Keys.Enter);
 
