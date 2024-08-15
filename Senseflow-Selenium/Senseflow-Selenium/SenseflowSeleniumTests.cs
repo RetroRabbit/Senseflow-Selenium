@@ -3,10 +3,20 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using Microsoft.Extensions.Configuration;
 using System.Threading;
-
+using Xunit.Abstractions;
+using Xunit.Sdk;
+public class AlphabeticalOrderer : ITestCaseOrderer
+{
+    public IEnumerable<TTestCase> OrderTestCases<TTestCase>(
+        IEnumerable<TTestCase> testCases) where TTestCase : ITestCase =>
+        testCases.OrderBy(testCase => testCase.TestMethod.Method.Name);
+}
 namespace Senseflow_Selenium
 {
     [Collection("SFTest")]
+    [TestCaseOrderer(
+    ordererTypeName: "AlphabeticalOrderer",
+    ordererAssemblyName: "Senseflow-Selenium")]
     public class SenseflowSeleniumTests : IClassFixture<SenseflowBrowserFixtures>
     {
         private readonly SenseflowBrowserFixtures _fixture;
@@ -21,7 +31,7 @@ namespace Senseflow_Selenium
         }
 
         [Fact]
-        public void SenseflowLoginTest()
+        public void aSenseflowLoginTest()
         {
             _fixture.ChromeWebDriver.Navigate().GoToUrl("https://app.senseflow.ai/time");
 
@@ -41,6 +51,25 @@ namespace Senseflow_Selenium
 
             Thread.Sleep(2000);
             Assert.Equal(("SenseFlow"), _fixture.ChromeWebDriver.Title);
+            Thread.Sleep(2000);
+        }
+
+        [Fact]
+        public void bSenseflowOpenTeamsTest()
+        {
+            Thread.Sleep(6000);
+            _fixture.ChromeWebDriver.FindElement(By.LinkText("Teams")).Click();
+            Thread.Sleep(6000);
+
+        }
+
+        [Fact]
+        public void cSenseflowOpenProjectsTest()
+        {
+            Thread.Sleep(6000);
+            _fixture.ChromeWebDriver.FindElement(By.LinkText("Projects")).Click();
+            Thread.Sleep(6000);
+
         }
     }
 }
